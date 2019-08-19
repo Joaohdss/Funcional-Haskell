@@ -22,7 +22,8 @@ fatorial x | (x == 0) = 1
 - Determina se um numero eh primo ou nao. Preocupe-se apenas em resolver o problema.
 - Nao precisa usar conhecimentos mais sofisticados da teoria dos numeros. Voce pode trabalhar com listas.
 -}
-
+  
+isPrime x = x >= 2 && all (\n -> mod x n /= 0) [2..x-1]      
 
 {-
 - Calcula um termo da sequencia de Fibonnacci. Voce pode trabalhar com listas. 
@@ -45,4 +46,4 @@ mdcEuclides a b = mdcEuclides b y
     where
         y = mod a b
 
-
+mmc a b = (a * b)
