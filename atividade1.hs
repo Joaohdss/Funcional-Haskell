@@ -54,4 +54,10 @@ mmc a b = head resul -- retorna a cabeça da lista
     where resul = filter (divi a b) [(min a b)..a*b] 
 divi a b n = (mod n a == 0) && (mod n b == 0)
 
+{-
+- Determina se dois numeros inteiros positivos sao co-primos. Dois numeros sao co-primos se 
+- o mdc deles for igual a 1. Ex: coprimo 35 64 = True 
+-}
+
+comprimo a b = (mdcEuclides a b) == 1
 
