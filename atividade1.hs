@@ -45,5 +45,13 @@ mdcEuclides a 0 = a
 mdcEuclides a b = mdcEuclides b y
     where
         y = mod a b
+{-
+ Calcula um MMC de dois numeros
+ divi retorna True se n é divisivel por a b
+-}
 
-mmc a b = (a * b)
+mmc a b = head resul -- retorna a cabeça da lista
+    where resul = filter (divi a b) [(min a b)..a*b] 
+divi a b n = (mod n a == 0) && (mod n b == 0)
+
+
