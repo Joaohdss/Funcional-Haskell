@@ -33,7 +33,7 @@ sumSquares :: Int -> Int -> Int
 sumSquares a b = square a + square b
 
 -- Defina uma funcao de alta ordem que aceita uma função (Int -> Int) e aplica a funcao a dois numeros
-higherOrderSum f a b = undefined
+higherOrderSum f a b = sum (map f [a,b])
 
 -- Defina a soma dos auqdrados em termos de higherOrderSum
 hoSumSquares = undefined
