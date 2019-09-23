@@ -26,9 +26,14 @@ tuple1 (Tuple4 a b c d) = Just a
 tuple2 (Tuple2 a b) = Just b
 tuple2 (Tuple3 a b c) = Just b
 tuple2 (Tuple4 a b c d) = Just b
+tuple2 _ = Nothing
 
-tuple3 = undefined 
-tuple4 = undefined 
+tuple3 (Tuple3 a b c) = Just c
+tuple3 (Tuple4 a b c d) = Just c
+tuple3 _ = Nothing 
+
+tuple4 (Tuple4 a b c d) = Just d
+tuple4 = Nothing 
 
 data List a = Nil | Cons a (List a) deriving (Eq,Show)
 
@@ -55,20 +60,39 @@ data BinaryTree a = NIL | Node a (BinaryTree a) (BinaryTree a)
 sizeBST NIL = 0
 sizeBST (Node a left right) = 1 + sizeBST left + sizeBST right
 
---verifica se uma BT é uma BST
-isBST = undefined
+getValue NIL = Nothing
+getValue (Node a _ _) = Just a
 
+getLeft NIL = Nothing
+getLeft (Node _ left _) = Just left
+
+getRight NIL = Nothing
+getRught (Node _ _ right) = Just right
+
+getParent NIL = Nothing
+getParent value (Node a left right) | (Just value == getValue left) || (Just value == getValue right) = (Node a left right)
+                                    | (value < a) = getParent left
+                                    | otherwise = getParent right 
+--verifica se uma BT é uma BST
+isBST NIL = True
+isBST (Node a left right) | (getValue left /= Nothing) && (getValue left > Just a) = False
+                          | (getValeu right /= Nothing) && (getValue right < Just a) = False
+                          | otherwise = (isBST left) && (isBST right)
 --insere uma nova chave na BST retornando a BST modificada
 insert = undefined
 
 --retorna o Node da BST contendo o dado procurado ou entao NIL
-search = undefined
+search NIL = Nothing
+search value (Node a left right) | (value == a) = Node a left right
+                                 | (value > a) = search value right
+                                 | otherwise = search value left
 
 --retorna o elmento maximo da BST
-maximum = undefined
-
+maximum (Node a left right) | (right == NIL) = Just a
+                            | otherwise = maximum left
 --retorna o elemento minimo da BST
-minimum = undefined
+minimum (Node a left right) | (left == NIL) = Just a
+                            | otherwise = minimum left
 
 --retorna o predecessor de um elemento da BST, caso o elemento esteja na BST
 predecessor = undefined
