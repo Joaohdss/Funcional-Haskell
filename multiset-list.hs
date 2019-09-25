@@ -1,14 +1,4 @@
-module MultisetList ( MultisetList.insert,
-                      remove,
-                      search,
-                      MultisetList.union,
-                      intersection,
-                      minus,
-                      inclusion,
-                      MultisetList.sum,
-                      size,
-                      sortKey,
-                      sortValue,
+module MultisetList ( 
                       module List
 )
  where
@@ -22,29 +12,46 @@ module MultisetList ( MultisetList.insert,
  - cada elemento da lista consiste do dado em si e sua quantidade (um par). 
  - Eh recomendavel que voce consulte a documentacao de Data.List
  -}
-import Data.List as List
+import Data.List as List hiding (insert, union, sum)
 
 {-
  - Insere um elemento na estrutura. Caso o elemento ja existe, sua quantidade na estrutura sera incrementada.
  -}
-insert elem bag = undefined
-
+insert elem [] = [(elem,1)]
+insert elem bag = if dado == elem then [(dado, quant + 1)] ++ t else [h] ++ (MultisetList.insert elem t)
+                where
+                  h = head (bag)
+                  t = tail (bag)
+                  dado = fst h
+                  quant = snd h
 {-
 - Remove um elemento da estrutura, levando em consideracao a manipulacao de sua quantidade na estrutura. 
 - Caso a quantidade atinja 0 (ou menos), o elemento deve realmente ser removido da estrutura
 -}
-remove elem bag = undefined
+remove elem bag = if (dado == elem && quant > 1) then [(dado, quant - 1)] ++ t else if (dado == elem && quant == 1) then t else [h] ++ (MultisetList.remove elem t)
+                where
+                  h = head (bag)
+                  t = tail (bag)
+                  dado = fst h
+                  quant = snd h
 
 {-
  - Busca um elemento na estrutura retornando sua quantidade. Caso o elemento nao exista, retorna 0 como a quantidade.
 -}
-search elem bag = undefined
-
+search elem [] = [(elem,0)]
+search elem bag = if (dado == elem) then [(dado,quant)] else (MultisetList.search elem t)
+               where
+                  h = head (bag)
+                  t = tail (bag)
+                  dado = fst h
+                  quant = snd h
+                  
 {-
  - Faz a uniao deste Bag com otherBag. A uniao consiste em ter os elementos dos dois Bags com suas maiores quantidades.
  - Por exemplo, A = {(a,1),(c,3)}, B = {(b,2),(c,1)}. A.union(B) deixa A = {(a,1),(c,3),(b,2)}
 -}
-union bag1 bag2 = undefined
+union bag1 [] = bag1
+union [] bag2 = bag2
 
 {-
  - Faz a intersecao deste Bag com otherBag. A intersecao consiste em ter os elementos que estao em ambos os bags com suas 
@@ -76,4 +83,8 @@ sum bag1 bag2 = undefined
 {-
  - Retorna a quantidade total de elementos no Bag
 -}
-size bag = undefined
+size [] = 0
+size bag = quant + MultisetList.size t
+         where
+             t = tail (bag)
+             quant = snd (head bag)
