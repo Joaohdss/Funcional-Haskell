@@ -66,8 +66,16 @@ union bag1 bag2 | (quant2 > (MultisetList.search dado2 bag1)) = MultisetList.uni
  - menores quantidades. Por exemplo, Seja A = {(a,3),(b,1)} e B = {(a,1)}. Assim, A.intersection(B) deixa A = {(a,1)}
  - Caso senhum elemento de A esteja contido em B ent�o a intersecao deixa A vazio.
 -}
-intersection bag1 bag2 = undefined
-
+-- se quantA < quantB = add head bag2 se nao = add head bag1
+intersection bag1 [] = []
+intersection [] bag2 = []
+intersection bag1 bag2 = if (quantA > quantB && quantB > 0) then [(dado1,quantB)] ++ intersection (tail bag1) bag2 
+else if(quantB > 0) then [(dado1,quantA)] ++ intersection (tail bag1) bag2 else intersection (tail bag1) bag2
+                 where
+                    dado1 = fst(head bag1)
+                    quantA = snd(head bag1)
+                    quantB = search dado1 bag2 
+                   
 {-
  - Faz a diferenca deste Bag com otherBag. A diferenca A \ B entre bags eh definida como segue:
    - contem os elementos de A que nao estao em B
@@ -75,13 +83,27 @@ intersection bag1 bag2 = undefined
      Caso essa quantidade seja negativa o elemento deve serremovido do Bag. 
      Por exemplo, seja A = {(a,3),(b,1)} e B = {(b,2),(a,1)}. Assim, A.minus(B) deixa A = {(a,2)}.
 -}
-minus bag1 bag2 = undefined
-
+minus bag1 [] = bag1
+minus [] bag2 = []
+minus bag1 bag2 = if(quant > 0) then [(dado,quant)] ++ minus (tail bag1) bag2 else minus (tail bag1) bag2
+              where
+                   qtde1 = snd(head bag1)
+                   dado = fst(head bag1)
+                   qdt2 = search dado bag2 
+                   quant = qtde1 - qdt2
 {-
  - Testa se este Bag esta incluso em otherBag. Para todo elemento deste bag, sua quantidade
  - deve ser menor or igual a sua quantidade em otherBag.
 -}
-inclusion bag1 bag2 = undefined
+inclusion [] [] = True
+inclusion [] _ = True
+inclusion _ [] = False
+inclusion bag1 bag2 = if(qdt1 <= qdt2) then inclusion (tail bag1) bag2 else False
+        where
+             qdt1 = snd(head bag1)
+             qdt2 = search (fst(head bag2)) bag2        
+
+
 
 {-
  - Realiza a soma deste Bag com otherBag. A soma de dois bags contem os elementos dos dois bags com suas quantidades somadas. 
