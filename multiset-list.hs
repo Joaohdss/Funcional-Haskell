@@ -86,15 +86,14 @@ inclusion bag1 bag2 = undefined
 {-
  - Realiza a soma deste Bag com otherBag. A soma de dois bags contem os elementos dos dois bags com suas quantidades somadas. 
 -}
-mySum [] bag2 = []
-mySum bag1 [] = []
-mySum bag1 bag2 = newA : mySum t1 t2
+mySum [] bag2 = bag2
+mySum bag1 [] = bag1
+mySum bag1 bag2 = mySum newA remA
           where
                dado1 = fst(head bag1)
                dado2 = fst(head bag2)
-               t2 = tail bag2
-               t1 = tail bag1
-               newA = MultisetList.insert (dado2+dado1) []
+               remA = MultisetList.remove dado2 bag2
+               newA = MultisetList.insert dado2 bag1
 
 {-
  - Retorna a quantidade total de elementos no Bag
