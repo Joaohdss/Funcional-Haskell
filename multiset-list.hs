@@ -38,20 +38,28 @@ remove elem bag = if (dado == elem && quant > 1) then [(dado, quant - 1)] ++ t e
 {-
  - Busca um elemento na estrutura retornando sua quantidade. Caso o elemento nao exista, retorna 0 como a quantidade.
 -}
-search elem [] = [(elem,0)]
-search elem bag = if (dado == elem) then [(dado,quant)] else (MultisetList.search elem t)
+search elem [] = 0
+search elem bag = if (dado == elem) then quant else (MultisetList.search elem t)
                where
                   h = head (bag)
                   t = tail (bag)
                   dado = fst h
                   quant = snd h
-                  
+
 {-
  - Faz a uniao deste Bag com otherBag. A uniao consiste em ter os elementos dos dois Bags com suas maiores quantidades.
  - Por exemplo, A = {(a,1),(c,3)}, B = {(b,2),(c,1)}. A.union(B) deixa A = {(a,1),(c,3),(b,2)}
 -}
 union bag1 [] = bag1
 union [] bag2 = bag2
+union bag1 bag2 | (quant2 > (MultisetList.search dado2 bag1)) = MultisetList.union newA bag2
+                   | otherwise = MultisetList.union bag1 t2 
+              where
+                h2 = head bag2
+                t2 = tail bag2
+                dado2 = fst h2
+                quant2 = snd h2
+                newA = MultisetList.insert dado2 bag1  
 
 {-
  - Faz a intersecao deste Bag com otherBag. A intersecao consiste em ter os elementos que estao em ambos os bags com suas 
@@ -78,7 +86,15 @@ inclusion bag1 bag2 = undefined
 {-
  - Realiza a soma deste Bag com otherBag. A soma de dois bags contem os elementos dos dois bags com suas quantidades somadas. 
 -}
-sum bag1 bag2 = undefined
+mySum [] bag2 = []
+mySum bag1 [] = []
+mySum bag1 bag2 = newA : mySum t1 t2
+          where
+               dado1 = fst(head bag1)
+               dado2 = fst(head bag2)
+               t2 = tail bag2
+               t1 = tail bag1
+               newA = MultisetList.insert (dado2+dado1) []
 
 {-
  - Retorna a quantidade total de elementos no Bag
